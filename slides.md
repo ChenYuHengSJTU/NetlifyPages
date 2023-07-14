@@ -1,5 +1,11 @@
 ---
 theme: seriph
+class: text-center
+transition: slide-left
+fonts:
+  sans: 'Roboto'
+  serif: 'Roboto Slab'
+  mono: 'Fira Code'-
 ---
 
 # Quantum Computation
