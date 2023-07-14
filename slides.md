@@ -5,7 +5,7 @@ transition: slide-left
 fonts:
   sans: 'Roboto'
   serif: 'Roboto Slab'
-  mono: 'Fira Code'-
+  mono: 'Fira Code'
 ---
 
 # Quantum Computation
