@@ -556,3 +556,152 @@ Programming for fun
 ---
 
 ## Lecture20 C标准库和实现
+
+<hr>
+
+### 应该怎么学习
+
+C 是 “高级汇编”，一定有为嵌入式设备实现的简化 libc
+
++ uclibc, [newlib](https://sourceware.org/newlib/), [bionic](https://github.com/aosp-mirror/platform_bionic), ...
++ 今天的选择：[musl](https://musl.libc.org/)
+    + musl-gcc 静态编译
+
+### [libc基本功能](https://jyywiki.cn/OS/2023/slides/20.2.slides)
++ [Freestanding环境](https://en.cppreference.com/w/cpp/freestanding)
+
+### [操作系统对象与环境](https://jyywiki.cn/OS/2023/slides/20.3.slides)
+
+environ (7)
+
++ 我们也可以实现自己的 env.c
+    + 问题来了：environ 是谁赋值的？
+    + 是时候请出我们的老朋友 watch point 了
+
+---
+
+### [动态内存管理](https://jyywiki.cn/OS/2023/slides/20.4.slides)
+
+##### 如何分配一大段内存
+
+直接问操作系统要就好啦
+
++ 用 MAP_ANONYMOUS 申请，想多少就有多少
+    + 超过物理内存上限都行
++ workload
++ 现实世界中的malloc/free
+
+### Take-away Message
+
+在系统调用和语言机制的基础上，libc 为我们提供了开发跨平台应用程序的 “第一级抽象”。在此基础上构建起了万千世界：C++ (扩充了 C 标准库)、Java、浏览器世界……今天，C 语言在应用开发方面有很多缺陷，但仍然为 “第一级抽象” 提供了一个有趣的范本：
+
++   [C is not a low-level language](https://dl.acm.org/doi/pdf/10.1145/3209212)
++   [C isn't a programming language any more](https://gankra.github.io/blah/c-isnt-a-language/)
+
+---
+
+## Lecture21 可执行文件和加载(1)
+
+<hr>
+
+### 静态加载和链接
+
+##### 在操作系统上实现 ELF Loader
+加载器 (loader) 的职责
+
++ 解析数据结构
++ 创建进程初始状态
+    + argv, envp, ...
+    + 再一次，System V ABI
++ 跳转执行
+
+代码示例
+
++ 能正确处理参数/环境变量 env.c
+
+---
+
+### <mark>[动态链接和加载](https://jyywiki.cn/OS/2023/slides/21.3.slides)</mark>
+
++ [Semantic Versioning](https://semver.org/)
+
+---
+
+## Lecture22 可执行文件和加载(2)
+
+<hr>
+
+### [动态链接与加载原理](https://jyywiki.cn/OS/2023/slides/22.1.slides)
+
+### [ELF动态链接与加载](https://jyywiki.cn/OS/2023/slides/22.2.slides)
+
+### [LD_PRELOAD](https://jyywiki.cn/OS/2023/slides/22.3.slides)
+
++ 能否链接我们 “修改” 过的 libc？
+    + 我们就不用像修改器那样 “入侵” 地址空间了
+
+LD_PRELOAD: 在加载之前 preload
+
++ 利用动态链接特性：符号先到先占坑
++ 先加载一个自己的库，占据符号
+ 
+其他操作系统上的 Hooking
+
+---
+
+## Lecture23 应用视角的操作系统 (回顾)
+
+<hr>
+
+###  ️[🌶️ 状态机：建模理解程序的世界](https://jyywiki.cn/OS/2023/slides/23.3.slides)
+
+#### Trace和调试器
++ strace/gdb
++ 我们甚至可以完整记录程序的执行
+    + [rr](https://dl.acm.org/doi/10.1145/3386277), QEMU, ...
+
+#### 性能优化和Profiler
+
+> Premature optimization is the root of all evil. (D. E. Knuth)
+
+Linux Kernel perf (支持硬件 PMU)
+
++ perf list, perf stat (-e), perf record, perf report
+
+##### 实际中的性能优化
+
++ [The Flame Graph](https://cacm.acm.org/magazines/2016/6/202665-the-flame-graph/fulltext)
+
+---
+
+#### Model Checker 和 Verifier
+
+一些真正的 model checkers
+
++ TLA+ by Leslie Lamport;
++ Java PathFinder (JFP) 和 SPIN
+
+---
+
+## Lecture24 进程的实现
+
+<hr>
+
++ VR眼镜
+
+进程在操作系统中的实现是简单又复杂的。从简单来说，进程就是带有独立地址空间的线程；通过硬件提供的分页机制，就能给线程戴上 “VR 眼镜”，使得看到的内存并不是真实的内存。同时，进程也是复杂的：我们可以借助虚拟内存实现 demand paging、copy-on-write fork 等有趣的机制；而如何调度系统中的进程，在现代多处理器时代也显得愈加复杂。
+
+---
+
+## Lecture27 设备驱动程序与文件系统
+
+<hr>
+
+### [目录树管理](https://jyywiki.cn/OS/2023/slides/27.4.slides)
+
++ 遍历目录
+    + c
+    + Python库
++ 链接
+
+
